@@ -1,0 +1,44 @@
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    MSG DB 0DH,0AH, 'NUMBER IS POSITIVE$'
+    MSG2 DB 0DH,0AH, 'NUMBER IS NEGATIVE$' 
+    MSG3 DB 0DH,0AH, 'NUMBER IS EQUAL TO 0$'
+    
+.CODE
+MAIN PROC  
+    MOV AX, @DATA
+    MOV DS, AX
+    MOV AX,-5
+    MOV CX,0
+    
+    CMP AX, CX
+    JG BIGGER  
+    JE EQUAL 
+    JL LESS  
+    JMP EXIT
+BIGGER:
+    LEA DX, MSG
+    MOV AH,9
+    INT 21H      
+    JMP EXIT
+    
+EQUAL:
+    LEA DX, MSG3
+    MOV AH, 9
+    INT 21H
+    JMP EXIT
+
+LESS:
+    LEA DX, MSG2
+    MOV AH, 9
+    INT 21H 
+    JMP EXIT
+
+EXIT:
+    MOV AH, 4CH
+    INT 21H
+   
+MAIN ENDP
+END MAIN
