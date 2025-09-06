@@ -1,0 +1,89 @@
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    MSG     DB 0DH,0AH, 'NUMBER 1 IS LARGER$'
+    MSG2    DB 0DH,0AH, 'NUMBER 2 IS LARGER$'
+    MSG3    DB 0DH,0AH, 'NUMBER 3 IS LARGER$'
+    MSG4    DB 0DH,0AH, 'NUMBERS ARE EQUAL$'
+    PROMPT  DB 0DH,0AH, 'Enter a number: $'
+
+.CODE
+MAIN PROC  
+    MOV AX, @DATA
+    MOV DS, AX
+
+    LEA DX, PROMPT
+    MOV AH, 9
+    INT 21H
+
+    MOV AH, 1
+    INT 21H
+    SUB AL, '0'
+    MOV BL, AL
+
+    LEA DX, PROMPT
+    MOV AH, 9
+    INT 21H
+
+    MOV AH, 1
+    INT 21H
+    SUB AL, '0'
+    MOV BH, AL
+
+    LEA DX, PROMPT
+    MOV AH, 9
+    INT 21H
+
+    MOV AH, 1
+    INT 21H
+    SUB AL, '0'
+    MOV CL, AL
+
+    MOV AL, BL
+    CMP AL, BH
+    JG  FIRST_LARGER
+    JE  NUMBERS_EQUAL
+
+    MOV AL, BH
+    CMP AL, CL
+    JG  SECOND_LARGER
+    JE  NUMBERS_EQUAL
+
+    MOV AL, CL
+    CMP AL, BL
+    JG  THIRD_LARGER
+    JE  NUMBERS_EQUAL
+
+    JMP EXIT
+
+FIRST_LARGER:
+    LEA DX, MSG
+    MOV AH, 9
+    INT 21H
+    JMP EXIT
+
+SECOND_LARGER:
+    LEA DX, MSG2
+    MOV AH, 9
+    INT 21H
+    JMP EXIT
+
+THIRD_LARGER:
+    LEA DX, MSG3
+    MOV AH, 9
+    INT 21H
+    JMP EXIT
+
+NUMBERS_EQUAL:
+    LEA DX, MSG4
+    MOV AH, 9
+    INT 21H
+    JMP EXIT
+
+EXIT:
+    MOV AH, 4CH
+    INT 21H
+
+MAIN ENDP
+END MAIN
